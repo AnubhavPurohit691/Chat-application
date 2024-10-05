@@ -13,6 +13,7 @@ declare global {
 		}
 	}
 }
+
 export async function protectRoute(req:Request,res:Response,next:NextFunction){
 
     const token=req.cookies.token

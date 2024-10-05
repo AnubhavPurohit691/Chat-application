@@ -24,9 +24,7 @@ model User{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   conversationsIds String[]
-
   conversations Conversation[]
-
   messages Message[]
 }
 
@@ -48,11 +46,8 @@ model Message{
   sender User @relation(fields: [senderId], references: [id])   
   body String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt                
-  
+  updatedAt DateTime @updatedAt                 
 }
-
-
 enum Gender {
   male
   female

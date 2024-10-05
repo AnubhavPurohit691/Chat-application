@@ -33,13 +33,8 @@ export async function signup(req:Request,res:Response){
             }
         })
         if(newuser){
-            const token=jwt.sign(newuser,process.env.JWT_SECRET!)
-        res.cookie("token",token,{
-            maxAge: 15 * 24 * 60 * 60 * 1000, // MS,
-            httpOnly: true, // prevent XSS cross site scripting
-            sameSite: "none", // CSRF attack cross-site request forgery
-            secure: process.env.NODE_ENV !== "development", // HTTPS
-        })
+            const token=jwt.sign(newuser.id,process.env.JWT_SECRET!)
+        res.cookie("realtime",token)
         res.status(201).json(newuser)
         }
     else{
@@ -64,14 +59,8 @@ export async function login(req:Request,res:Response){
     if(!iscorrectPassword){
         return res.status(400).json({message:"Invalid credentials"})
     }
-    const token=jwt.sign(existinguser,process.env.JWT_SECRET!)
-    res.cookie("token",token,{
-		maxAge: 15 * 24 * 60 * 60 * 1000, // MS,
-		httpOnly: false, // prevent XSS cross site scripting
-        sameSite: "none",
-        secure: process.env.NODE_ENV !== "development", // CSRF attack cross-site request forgery
-		 // HTTPS
-	})
+    const token=jwt.sign(existinguser.id,process.env.JWT_SECRET!)
+    res.cookie("realtime",token)
     res.status(200).json(existinguser)
    
    } catch (error) {
@@ -94,7 +83,7 @@ export async function getme(req:Request,res:Response){
         const existuser=await prisma.user.findUnique({
             where:{
                 id:req.user.id           }
-        })
+        }) 
         res.status(200).json(existuser)
     } catch (error) {
         console.log(error)
